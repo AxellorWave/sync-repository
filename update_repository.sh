@@ -56,6 +56,9 @@ merge_branches()
           for branch in "${complete_branches[@]}"; do
             echo "* $branch"
           done
+          if [ ${#my_array[@]} -eq 0 ]; then
+            echo "Нет обновленных веток"
+          fi
           return 0
         fi  
       fi
@@ -66,10 +69,16 @@ merge_branches()
   for branch in "${complete_branches[@]}"; do
     echo "* $branch"
   done
+  if [ ${#my_array[@]} -eq 0 ]; then
+    echo "Нет обновленных веток"
+  fi
   echo "Пропущенные ветки:"
   for branch in "${skipped_branches[@]}"; do
     echo "* $branch"
   done
+  if [ ${#my_array[@]} -eq 0 ]; then
+    echo "Нет пропущенных веток"
+  fi
   return 0
 }
 
