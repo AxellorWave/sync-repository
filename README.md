@@ -23,7 +23,7 @@
 1. Клонируйте или скачайте скрипт:
 ```bash
 
-wget https://raw.githubusercontent.com/AxellorWave/repository_updater/master/sync-rep.sh
+wget https://raw.githubusercontent.com/AxellorWave/sync-repository/master/sync-rep.sh
 chmod +x sync-rep.sh 
 ```
 
