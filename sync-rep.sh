@@ -6,6 +6,16 @@ else
     PARAM="$1"
 fi
 
+is_script_ignored() {
+    local script_name=$(basename "$0")
+    local global_excludes=$(git config --global core.excludesFile)
+    if [ -n "$global_excludes" ] && [ -f "$global_excludes" ] && grep -q "^$script_name$" "$global_excludes"; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 check_upstream() 
 {
   if ! git remote get-url upstream &>/dev/null; then
@@ -50,11 +60,13 @@ merge_branches()
   for branch in "${skipped_branches[@]}"; do
     echo "* $branch"
   done
+  git switch master
   return 0
 }
 
 main()
 {
+
   case "$PARAM" in
     --help|-h)
       echo "ОПИСАНИЕ"
@@ -63,7 +75,7 @@ main()
       echo "  из upstream и мержит изменения во все остальные ветки."
       echo ""
       echo "ИСПОЛЬЗОВАНИЕ"
-      echo "  ./update_repository.sh [ПАРАМЕТР]"
+      echo "  ./$(basename "$0") [ПАРАМЕТР]"
       echo ""
       echo "ПАРАМЕТРЫ"
       echo "  -h, --help           Показать эту справку"
@@ -83,23 +95,34 @@ main()
       echo "  5. Последовательное обновление всех веток проекта"
       echo ""
       echo "ПРИМЕРЫ"
-      echo "  ./update_repository.sh -c               # Остановка при конфликтах"
-      echo "  ./update_repository.sh -s               # Пропуск конфликтующих веток"
-      echo "  ./update_repository.sh -h               # Вывод справки"
+      echo "  ./$(basename "$0") -c               # Остановка при конфликтах"
+      echo "  ./$(basename "$0") -s               # Пропуск конфликтующих веток"
+      echo "  ./$(basename "$0") -h               # Вывод справки"
       echo ""
       exit 0
     ;;
     --skip-conflict|-s)
-      $PARAM = "s"
+      PARAM="s"
       ;;
     --stop-conflict|-c)
-      $PARAM = "c"
+      PARAM="c"
       ;;
     *)
       echo "Неизвестный параметр: $PARAM" >&2
       exit 1
       ;;
 esac
+  if ! is_script_ignored; then
+    echo "WARNING! Скрипт не добавлен в ignore"
+    echo "Используйте следующие команды:"
+    if ! git config --global core.excludesFile &>/dev/null; then
+      echo "mkdir -p ~/.config/git/ && echo "$(basename "$0")" >> ~/.config/git/ignore"
+      echo "git config --global core.excludesFile ~/.config/git/ignore"
+    else
+      echo "echo "$(basename "$0")" >> $(git config --global core.excludesFile)"
+    fi
+    echo ""
+  fi
   if check_upstream; then
     git switch master
     git fetch upstream
