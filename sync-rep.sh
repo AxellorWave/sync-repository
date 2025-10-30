@@ -21,14 +21,14 @@ check_upstream()
   if ! git remote get-url upstream &>/dev/null; then
     echo "Upstream не настроен"
     echo "Для настройки введите команду:"
-    echo "git remote get-url upstream <repository_link>" 
+    echo "git remote add upstream <repository_link>" 
     return 1
   fi
   if [ "$(git remote get-url upstream)" = "$(git remote get-url origin)" ]; then
     echo "origin и upstream совпадают"
     echo "Изменити ссылку на upstream с помощью команд:"
     echo "git remote remove upstream"
-    echo "git remote get-url upstream <repository_link>" 
+    echo "git remote add upstream <repository_link>" 
     return 1
   fi
   return 0
@@ -86,6 +86,13 @@ main()
       echo "  • Настроен upstream-репозиторий:"
       echo "    git remote add upstream <repository_url>"
       echo "  • Доступ на push в origin-репозиторий"
+      echo "  • Настройка игнорирования скрипта:"
+      echo "    Если файла с игнором не было раньше"
+      echo "    (проверить через git config --global core.excludesFile)"
+      echo "       mkdir -p ~/.config/git/ && echo "$(basename "$0")" >> ~/.config/git/ignore"
+      echo "       git config --global core.excludesFile ~/.config/git/ignore"
+      echo "    Если файл был"
+      echo '       echo '$(basename "$0")' >> $(git config --global core.excludesFile)'
       echo ""
       echo "ПРОЦЕСС РАБОТЫ"
       echo "  1. Переключение на master ветку"
@@ -116,10 +123,10 @@ esac
     echo "WARNING! Скрипт не добавлен в ignore"
     echo "Используйте следующие команды:"
     if ! git config --global core.excludesFile &>/dev/null; then
-      echo "mkdir -p ~/.config/git/ && echo "$(basename "$0")" >> ~/.config/git/ignore"
+      echo 'mkdir -p ~/.config/git/ && echo '$(basename "$0")' >> ~/.config/git/ignore'
       echo "git config --global core.excludesFile ~/.config/git/ignore"
     else
-      echo "echo "$(basename "$0")" >> $(git config --global core.excludesFile)"
+      echo 'echo "$(basename "$0")" >> $(git config --global core.excludesFile)'
     fi
     echo ""
   fi
