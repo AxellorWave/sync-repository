@@ -39,32 +39,17 @@ merge_branches()
           git merge --abort
           skipped_branches+=("$branch")
         else 
-          echo "Обновленные ветки:"
           for branch in "${complete_branches[@]}"; do
             echo "* $branch"
           done
-          if [ ${#my_array[@]} -eq 0 ]; then
-            echo "Нет обновленных веток"
-          fi
           return 0
         fi  
       fi
     fi
   done
-  echo "Обновленные ветки:"
-  for branch in "${complete_branches[@]}"; do
-    echo "* $branch"
-  done
-  if [ ${#my_array[@]} -eq 0 ]; then
-    echo "Нет обновленных веток"
-  fi
-  echo "Пропущенные ветки:"
   for branch in "${skipped_branches[@]}"; do
     echo "* $branch"
   done
-  if [ ${#my_array[@]} -eq 0 ]; then
-    echo "Нет пропущенных веток"
-  fi
   return 0
 }
 
@@ -82,8 +67,8 @@ main()
       echo ""
       echo "ПАРАМЕТРЫ"
       echo "  -h, --help           Показать эту справку"
-      echo "  -s, --skip-conflict  Пропускать ветки с конфликтами"
-      echo "  -c, --stop-conflict  Остановиться при первом конфликте (по умолчанию)"
+      echo "  -s, --skip-conflict  Пропускать ветки с конфликтами и выводить их"
+      echo "  -c, --stop-conflict  Остановиться при первом конфликте и вывести обработанные"
       echo ""
       echo "ПРЕДВАРИТЕЛЬНЫЕ ТРЕБОВАНИЯ"
       echo "  • Настроен upstream-репозиторий:"
