@@ -29,10 +29,23 @@ check_upstream()
   return 0
 }
 
+merge_branches()
+{
+  for branch in $(git branch --format='%(refname:short)'); do
+    if [ "$branch" != "master" ]; then
+      echo "Обрабатываю ветку: $branch"
+    fi
+  done
+}
+
 main()
 {
   if check_upstream; then
-    echo "ok"
+    merge_branches
+    #git switch master
+    #git fetch upstream
+    #git merge upstream/master
+    #git push
   else 
     exit 1
   fi
