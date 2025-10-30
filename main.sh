@@ -33,7 +33,9 @@ merge_branches()
 {
   for branch in $(git branch --format='%(refname:short)'); do
     if [ "$branch" != "master" ]; then
-      echo "Обрабатываю ветку: $branch"
+      git switch $branch
+      git merge master
+      git push
     fi
   done
 }
