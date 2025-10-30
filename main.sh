@@ -1,13 +1,13 @@
 #!/bin/bash
 
-if [[ ! -f "config.conf" ]]; then
+if [ ! -f "config.conf" ]; then
   echo "Ошибка: Отсутствует файл config.conf"
   exit 1
 fi
 
 source config.conf
 
-if [[ -z "${DIR_PATH+x}" ]]; then
+if [ -z "${DIR_PATH+x}" ]; then
   echo "Ошибка: Переменная DIR_PATH отсутствует в файле config.conf"
   exit 1
 fi
@@ -17,18 +17,25 @@ cd "$DIR_PATH" &>/dev/null || {
   exit 1
 }
 
-check_upstream() {
-    
-  if git remote get-url upstream &>/dev/null; then
-    echo "Upstream уже настроен: $(git remote get-url upstream)"
-    return 0
-  else
+check_upstream() 
+{
+  if ! git remote get-url upstream &>/dev/null; then
     echo "Upstream не настроен"
     echo "Для настройки введите команды:"
     echo "cd $DIR_PATH"
     echo "git remote get-url upstream <repository_link>" 
     return 1
   fi
+  return 0
 }
 
-check_upstream
+main()
+{
+  if check_upstream; then
+    echo "ok"
+  else 
+    exit 1
+  fi
+}
+
+main
