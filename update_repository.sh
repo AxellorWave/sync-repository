@@ -6,29 +6,18 @@ else
     PARAM="$1"
 fi
 
-if [ ! -f "config.conf" ]; then
-  echo "Ошибка: Отсутствует файл config.conf"
-  exit 1
-fi
-
-source config.conf
-
-if [ -z "${DIR_PATH+x}" ]; then
-  echo "Ошибка: Переменная DIR_PATH отсутствует в файле config.conf"
-  exit 1
-fi
-
-cd "$DIR_PATH" &>/dev/null || {
-  echo "Ошибка: Не удалось перейти в директорию '$DIR_PATH'"
-  exit 1
-}
-
 check_upstream() 
 {
   if ! git remote get-url upstream &>/dev/null; then
     echo "Upstream не настроен"
-    echo "Для настройки введите команды:"
-    echo "cd $DIR_PATH"
+    echo "Для настройки введите команду:"
+    echo "git remote get-url upstream <repository_link>" 
+    return 1
+  fi
+  if [ "$(git remote get-url upstream)" = "$(git remote get-url origin)" ]; then
+    echo "origin и upstream совпадают"
+    echo "Изменити ссылку на upstream с помощью команд:"
+    echo "git remote remove upstream"
     echo "git remote get-url upstream <repository_link>" 
     return 1
   fi
@@ -50,8 +39,6 @@ merge_branches()
           git merge --abort
           skipped_branches+=("$branch")
         else 
-          echo "Синхронизация окончена"
-          echo "Конфликт на ветке: $branch"
           echo "Обновленные ветки:"
           for branch in "${complete_branches[@]}"; do
             echo "* $branch"
@@ -64,7 +51,6 @@ merge_branches()
       fi
     fi
   done
-  echo "Синхронизация окончена"
   echo "Обновленные ветки:"
   for branch in "${complete_branches[@]}"; do
     echo "* $branch"
@@ -98,10 +84,6 @@ main()
       echo "  -h, --help           Показать эту справку"
       echo "  -s, --skip-conflict  Пропускать ветки с конфликтами"
       echo "  -c, --stop-conflict  Остановиться при первом конфликте (по умолчанию)"
-      echo ""
-      echo "КОНФИГУРАЦИЯ"
-      echo "  Файл config.conf должен содержать:"
-      echo "  DIR_PATH=/path/to/your/git/repository"
       echo ""
       echo "ПРЕДВАРИТЕЛЬНЫЕ ТРЕБОВАНИЯ"
       echo "  • Настроен upstream-репозиторий:"
