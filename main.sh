@@ -76,19 +76,52 @@ main()
 {
   case "$PARAM" in
     --help|-h)
-        echo "Help text"
-        exit 0
-        ;;
+      echo "ОПИСАНИЕ"
+      echo "  Скрипт для синхронизации всех веток проекта с мастер-веткой"
+      echo "  через upstream-репозиторий. Автоматически обновляет master"
+      echo "  из upstream и мержит изменения во все остальные ветки."
+      echo ""
+      echo "ИСПОЛЬЗОВАНИЕ"
+      echo "  ./main.sh [ПАРАМЕТР]"
+      echo ""
+      echo "ПАРАМЕТРЫ"
+      echo "  -h, --help           Показать эту справку"
+      echo "  -s, --skip-conflict  Пропускать ветки с конфликтами"
+      echo "  -c, --stop-conflict  Остановиться при первом конфликте (по умолчанию)"
+      echo ""
+      echo "КОНФИГУРАЦИЯ"
+      echo "  Файл config.conf должен содержать:"
+      echo "  DIR_PATH=/path/to/your/git/repository"
+      echo ""
+      echo "ПРЕДВАРИТЕЛЬНЫЕ ТРЕБОВАНИЯ"
+      echo "  • Настроен upstream-репозиторий:"
+      echo "    git remote add upstream <repository_url>"
+      echo "  • Доступ на push в origin-репозиторий"
+      echo ""
+      echo "ПРОЦЕСС РАБОТЫ"
+      echo "  1. Переключение на master ветку"
+      echo "  2. Получение изменений из upstream"
+      echo "  3. Слияние upstream/master в локальный master"
+      echo "  4. Push обновленного master в origin"
+      echo "  5. Последовательное обновление всех веток проекта"
+      echo ""
+      echo "ПРИМЕРЫ"
+      echo "  ./main.sh -c               # Остановка при конфликтах"
+      echo "  ./main.sh -s               # Пропуск конфликтующих веток"
+      echo "  ./main.sh -h               # Вывод справки"
+      echo ""
+      exit 0
+    ;;
     --skip-conflict|-s)
-        $PARAM = "s"
-        ;;
+      $PARAM = "s"
+      ;;
     --stop-conflict|-c)
-        $PARAM = "c"
-        ;;
+      $PARAM = "c"
+      ;;
     *)
-        echo "Неизвестный параметр: $PARAM" >&2
-        exit 1
-        ;;
+      echo "Неизвестный параметр: $PARAM" >&2
+      exit 1
+      ;;
 esac
   if check_upstream; then
     git switch master
