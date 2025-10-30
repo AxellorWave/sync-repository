@@ -52,7 +52,7 @@ merge_branches()
         else 
           echo "Конфликт. Ветка: $branch"
           echo "Обновленные ветки:"
-          for for branch in "${complete_branches[@]}"; do
+          for branch in "${complete_branches[@]}"; do
             echo "* $branch"
           done
           return 0
@@ -62,11 +62,11 @@ merge_branches()
   done
   echo "Синхронизация окончена"
   echo "Обновленные ветки:"
-  for for branch in "${complete_branches[@]}"; do
+  for branch in "${complete_branches[@]}"; do
     echo "* $branch"
   done
   echo "Пропущенные ветки:"
-  for for branch in "${skipped_branches[@]}"; do
+  for branch in "${skipped_branches[@]}"; do
     echo "* $branch"
   done
   return 0
