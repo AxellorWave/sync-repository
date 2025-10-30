@@ -35,7 +35,7 @@ merge_branches()
         git push
         complete_branches+=("$branch")
       else
-        if [$PARAM == 's']; then
+        if ["$PARAM" = "s"]; then
           git merge --abort
           skipped_branches+=("$branch")
         else 
