@@ -23,8 +23,10 @@ check_upstream() {
     echo "Upstream уже настроен: $(git remote get-url upstream)"
     return 0
   else
-    echo "Upstream не настроен" 
-    pwd
+    echo "Upstream не настроен"
+    echo "Для настройки введите команды:"
+    echo "cd $DIR_PATH"
+    echo "git remote get-url upstream <repository_link>" 
     return 1
   fi
 }
