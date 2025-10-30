@@ -50,7 +50,8 @@ merge_branches()
           git merge --abort
           skipped_branches+=("$branch")
         else 
-          echo "Конфликт. Ветка: $branch"
+          echo "Синхронизация окончена"
+          echo "Конфликт на ветке: $branch"
           echo "Обновленные ветки:"
           for branch in "${complete_branches[@]}"; do
             echo "* $branch"
