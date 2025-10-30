@@ -82,7 +82,7 @@ main()
       echo "  из upstream и мержит изменения во все остальные ветки."
       echo ""
       echo "ИСПОЛЬЗОВАНИЕ"
-      echo "  ./main.sh [ПАРАМЕТР]"
+      echo "  ./update_repository.sh [ПАРАМЕТР]"
       echo ""
       echo "ПАРАМЕТРЫ"
       echo "  -h, --help           Показать эту справку"
@@ -106,9 +106,9 @@ main()
       echo "  5. Последовательное обновление всех веток проекта"
       echo ""
       echo "ПРИМЕРЫ"
-      echo "  ./main.sh -c               # Остановка при конфликтах"
-      echo "  ./main.sh -s               # Пропуск конфликтующих веток"
-      echo "  ./main.sh -h               # Вывод справки"
+      echo "  ./update_repository.sh -c               # Остановка при конфликтах"
+      echo "  ./update_repository.sh -s               # Пропуск конфликтующих веток"
+      echo "  ./update_repository.sh -h               # Вывод справки"
       echo ""
       exit 0
     ;;
