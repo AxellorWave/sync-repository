@@ -41,7 +41,7 @@ merge_branches()
   for branch in $(git branch --format='%(refname:short)'); do
     if [ "$branch" != "master" ]; then
       git switch $branch
-      if git merge master; then
+      if git ls-remote --heads origin "$branch" && git merge master; then
         git push
         complete_branches+=("$branch")
       else
@@ -49,6 +49,9 @@ merge_branches()
           git merge --abort
           skipped_branches+=("$branch")
         else 
+          if ! git ls-remote --heads origin "$branch"; then
+            git merge master
+          fi  
           for branch in "${complete_branches[@]}"; do
             echo "* $branch"
           done
